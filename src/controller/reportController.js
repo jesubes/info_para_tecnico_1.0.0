@@ -3,13 +3,13 @@
 const { client: whatsapp } = require("./qrCodeController.js")
 
 
+/** Envio del mesaje por cada numero telefonico */
 const reportForMsg = async (req, res) =>{
 
     //sacar el numero de query
     /* Traemos el JSON para sacar el celular del almacen ya filtrado,
         y los demas campos los enviamos a generar una imagen para enviar
         un archivo .jpg al celular
-    
     */
 
     const { number = number.toString(), name} = req.query
@@ -19,19 +19,12 @@ const reportForMsg = async (req, res) =>{
     //mandamos el JSON a convertir en imagen
     // await jsonToImage(jsonData, number)
 
-
-
     // ---- TODO cambiar a jsonTextSend
-   const {Texto: jsonTextSend, Unidad: unidad, Tecnico: tecnico, Supervisor: supervisor} = jsonData
-
-
+    //    const {Texto: jsonTextSend, Unidad: unidad, Tecnico: tecnico, Supervisor: supervisor} = jsonData
+    const {Texto: jsonTextSend} = jsonData
 
     //datos de whatsapp
     const prefixNumber = `549${number}`
-
-
-    //saco el path para las imagenes que se guardan
-    // const mediaWs = MessageMedia.fromFilePath(`./reportImage/materiales${number}.jpg`)
     
     //TODO --- enviar el TEXTO ESCRITO EN EL EXCEL
 
@@ -40,20 +33,8 @@ const reportForMsg = async (req, res) =>{
         let response = null
         if(contactId){
 
-            if(unidad){
-                response = await whatsapp.sendMessage(contactId._serialized, `Hola ${name}.\nTienes asignada la Unidad: ${unidad} \n${jsonTextSend}`)
-
-            } else{
-                response = await whatsapp.sendMessage(contactId._serialized, `Hola ${name}. \n${jsonTextSend}`)
-
-            }
-
-            // const response = await whatsapp.sendMessage(contactId._serialized, `Hola ${name}, \nTe envio el stock en tu almacén: `)
+            response = await whatsapp.sendMessage(contactId._serialized, `${jsonTextSend}`)
             new Promise(resolve => setTimeout(resolve, 500))
-
-
-            //Saco imagen - No enviar imagen
-            // const response = await whatsapp.sendMessage(contactId._serialized, mediaWs)
 
             console.log('Mensaje enviado -> ', response.fromMe);
 

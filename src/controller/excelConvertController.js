@@ -86,10 +86,10 @@ const excelToJsonContact = async (req, res) =>{
         const worksheet = workbook.Sheets[workbook.SheetNames[0]] // convertir la primera hoja a JSON
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
         //validación de datps - nombre y su numero de telefono
-        const resultDataFilter = await filterToJSON(["Nombre","Tecnico","Unidad","Telefono","Supervisor","Texto"], jsonData);
+        const resultDataFilter = await filterToJSON(["Telefono","Texto"], jsonData);
         //se devuelve limpio, sin capos vacios
         const resultNoNull = resultDataFilter.filter((item) => {
-            if(item.Nombre && item.Telefono && item.Texto) {
+            if(item.Telefono && item.Texto) {
                 return item
             }
         })
